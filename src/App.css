@@ -1,0 +1,144 @@
+.homePageWrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  height: 100vh;
+}
+.formWrapper{
+  background: rgb(20, 17, 17);
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+}
+footer{
+  position: fixed;
+  bottom: 0;
+
+}
+footer a{
+  color: rgb(109, 14, 14);
+}
+.inputGroup{
+  display: flex;
+  flex-direction: column;
+}
+
+.mainLable{
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+.homelogo{
+  height:110px;
+  margin-bottom: 20px;
+}
+.inputBox{
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  margin-bottom: 14px;
+  background: #eee;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.btn{
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-weight: bold;
+}
+.joinBtn,.leaveBtn{
+  background: rgb(42, 15, 129);
+  color: #eee;
+  width: 100px;
+  margin-left: auto;
+  
+}
+.joinBtn:hover,.leaveBtn:hover{
+  background: blue;
+}
+.createInfo{
+  margin: 0 auto;
+  margin-top: 20px;
+ 
+}
+.createNewbtn{
+  
+  color: rgb(109, 14, 14) ;
+  text-decoration: none;
+   border-bottom: 1px solid rgb(109, 14, 14);
+   transition: all 0.3sec ease-in-out;
+
+}
+.createNewbtn:hover,footer a:hover{
+  color: brown;
+}
+
+.mainwrap{
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  height: 100vh;
+}
+.aside{
+  background: black;
+  padding: 16px;
+  color: #eee;
+  display: flex;
+  flex-direction: column;
+}
+.asideInner{
+  flex: 1;
+}
+
+.clientlist{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.client{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-weight: bold;
+}
+.username{
+  margin-top: 10px;
+}
+.logoimage{
+  border-bottom: 1px solid red;
+  padding-bottom: 10px;
+}
+.logo{
+  height:50px;
+}
+
+.leaveBtn{
+  width: 100%;
+  margin-top: 10px;
+}
+
+.cpyBtn{
+  width: 100%;
+}
+
+.CodeMirror{
+   min-height: calc(100vh - 20px);
+   font-size: 16px;
+   line-height: 1.6;
+   padding-top: 20px;
+}
+.inp{
+  display: flex;
+  flex-direction: column;
+  height:160px;
+  width: 100%;
+  border:none;
+}
