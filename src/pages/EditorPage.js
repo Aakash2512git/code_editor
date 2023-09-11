@@ -5,7 +5,8 @@ import { initSocket } from '../Socket';
 import ACTIONS from '../Actions';
 import { useLocation,useNavigate ,Navigate,useParams} from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import InputArea from '../components/InputArea';
+import axios from 'axios'; // Import axios library
+
 
 
 
@@ -18,6 +19,24 @@ const EditorPage = () => {
     const reactNavigator=useNavigate();
 
     const [clients,setClients]=useState([]);
+    const [output, setOutput] = useState('');
+
+
+    const handleCompile = async () => {
+      try {
+          const response = await axios.post('http://localhost:5000/compile', {
+              code: codeRef.current,
+          });
+  
+          // Update the output state with the compilation result
+          setOutput(response.data);
+      } catch (error) {
+          console.error('Compilation error:', error);
+          toast.error('Error compiling code');
+          setOutput('Error compiling code');
+      }
+  };
+  
 
     useEffect(()=>{
       const init=async()=>{
@@ -106,12 +125,17 @@ const EditorPage = () => {
         <div>
           <button className='btn cpyBtn' onClick={copyRoomId}>Copy RoomId</button>
           <button className='btn leaveBtn' onClick={leaveRoom}>Leave</button>
+          <button className='btn submit' onClick={handleCompile}>Submit</button>
+
+
         </div>
+        <div className='outputArea'>
+                    <pre>{output}</pre>
+                </div>
         </div> 
        <div className='editor'>
         <Editor socketRef={socketRef} roomId={roomId} onCodeChange={(code)=>{codeRef.current=code}}/>
         <div >
-        {/*<InputArea/>*/}
        </div>
        </div>
        

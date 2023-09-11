@@ -28,6 +28,7 @@ const joinRoom=()=>{
     });
 
 };
+
 const handleInputEnter=(e)=>{
     if(e.key==='Enter'){
         //e.preventDefault();
@@ -63,7 +64,7 @@ const handleInputEnter=(e)=>{
                 </span>
             </div>
          </div> 
-         <footer><h4>Built with ❤  by <a href='https://github.com/Aakash2512git'>Aakash</a></h4></footer>  
+         <footer><h4>Built  by <a href='https://github.com/Aakash2512git'>Aakash</a></h4></footer>  
     </div>
   )
 }
