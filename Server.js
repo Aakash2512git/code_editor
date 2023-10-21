@@ -6,6 +6,9 @@ const { Server } = require('socket.io');
 const ACTIONS = require('./src/Actions');
 const cors = require('cors'); // Import the cors middleware
 const axios = require('axios'); // Import axios for making API requests
+require('dotenv').config();
+
+
 
 
 app.use(cors());
@@ -43,14 +46,14 @@ app.post('/compile', async (req, res) => {
   const code = req.body.code; // Get code from request body
     console.log(code);
 
-  const KEY=process.env.key;
+  
   const options = {
     method: 'POST',
     url: 'https://cpp-code-compiler.p.rapidapi.com/',
     headers: {
       'content-type': 'application/json',
       'Accept': 'application/json',
-      'X-RapidAPI-Key':'4cd154c434msh7f8a19726696913p161acbjsnf5b8428dc1a8' ,
+      'X-RapidAPI-Key':process.env.REACT_APP_KEY,
       'X-RapidAPI-Host': 'cpp-code-compiler.p.rapidapi.com'
     },
     data: {
@@ -63,6 +66,7 @@ app.post('/compile', async (req, res) => {
     const response = await axios.request(options);
 
     if (response.data && response.data.output) {
+      console.log(process.env.REACT_APP_KEY);
       console.log("logging response...")
       res.send(response.data.output);
       console.log(response.data.output);
