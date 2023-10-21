@@ -10,5 +10,5 @@ export const initSocket=async()=>{
 
     };
 
-    return io('http://localhost:5000',options);
+    return io('process.env.PORT',options);
 };
