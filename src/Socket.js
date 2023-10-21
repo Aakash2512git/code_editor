@@ -10,5 +10,5 @@ export const initSocket=async()=>{
 
     };
 
-    return io('process.env.PORT',options);
+    return io(process.env.PORT,options);
 };
