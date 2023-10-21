@@ -21,15 +21,17 @@ const EditorPage = () => {
     const [clients,setClients]=useState([]);
     const [output, setOutput] = useState('');
 
+    
 
     const handleCompile = async () => {
-      try {
+      try {console.log('Sending code to the API:', codeRef.current); 
           const response = await axios.post('http://localhost:5000/compile', {
               code: codeRef.current,
           });
-  
           // Update the output state with the compilation result
+          console.log(response.data)
           setOutput(response.data);
+          
       } catch (error) {
           console.error('Compilation error:', error);
           toast.error('Error compiling code');

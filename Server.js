@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const http = require('http');
+const path=require('path');
 const { Server } = require('socket.io');
 const ACTIONS = require('./src/Actions');
 const cors = require('cors'); // Import the cors middleware
@@ -13,6 +14,16 @@ app.use(express.json());
 
 const server = http.createServer(app);
 const io = new Server(server);
+
+// Serve the React app
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Handle React app routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+
 
 const userSocketMap={};
 
@@ -30,6 +41,7 @@ function getAllConnectedClients(roomId){
 
 app.post('/compile', async (req, res) => {
   const code = req.body.code; // Get code from request body
+    console.log(code);
 
   const KEY=process.env.key;
   const options = {
@@ -37,7 +49,8 @@ app.post('/compile', async (req, res) => {
     url: 'https://cpp-code-compiler.p.rapidapi.com/',
     headers: {
       'content-type': 'application/json',
-      'X-RapidAPI-Key':'4cd154c434msh7f8a19726696913p161acbjsnf5b8428dc1a' ,
+      'Accept': 'application/json',
+      'X-RapidAPI-Key':'4cd154c434msh7f8a19726696913p161acbjsnf5b8428dc1a8' ,
       'X-RapidAPI-Host': 'cpp-code-compiler.p.rapidapi.com'
     },
     data: {
@@ -48,10 +61,17 @@ app.post('/compile', async (req, res) => {
   
   try {
     const response = await axios.request(options);
-    console.log(response.data.output);
-    res.json(response.data.output);
+
+    if (response.data && response.data.output) {
+      console.log("logging response...")
+      res.send(response.data.output);
+      console.log(response.data.output);
+    } else {
+      res.status(500).send("API response does not contain the expected output.");
+    }
   } catch (error) {
     console.error(error);
+    res.status(500).send("Error in API request.");
   }
 });
 
