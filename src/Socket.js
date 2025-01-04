@@ -1,6 +1,7 @@
 import{io} from 'socket.io-client';
 
 export const initSocket=async()=>{
+    const socketUrl = process.env.REACT_APP_SOCKET_URL || 'http://localhost:5003';
     const options={
         'force new connection':true,
         reconnectionAttempt:'Infinity',
@@ -10,5 +11,5 @@ export const initSocket=async()=>{
 
     };
 
-    return io(80,options);
+    return io(socketUrl,options);
 };

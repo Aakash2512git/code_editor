@@ -25,12 +25,14 @@ const EditorPage = () => {
 
     const handleCompile = async () => {
       try {console.log('Sending code to the API:', codeRef.current); 
-          const response = await axios.post('http://localhost:5000/compile', {
+          const response = await axios.post(`${process.env.REACT_APP_SOCKET_URL}/compile`, {
               code: codeRef.current,
           });
           // Update the output state with the compilation result
           console.log(response.data)
+          console.log(process.env.REACT_APP_SOCKET_URL)
           setOutput(response.data);
+
           
       } catch (error) {
           console.error('Compilation error:', error);

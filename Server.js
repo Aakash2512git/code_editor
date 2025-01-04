@@ -44,17 +44,17 @@ function getAllConnectedClients(roomId){
 
 app.post('/compile', async (req, res) => {
   const code = req.body.code; // Get code from request body
-    console.log(code);
+    console.log('Code received:',code);
 
   
   const options = {
     method: 'POST',
-    url: 'https://cpp-code-compiler.p.rapidapi.com/',
+    url: 'https://cpp-17-code-compiler.p.rapidapi.com/',
     headers: {
       'content-type': 'application/json',
       'Accept': 'application/json',
       'X-RapidAPI-Key':process.env.REACT_APP_KEY,
-      'X-RapidAPI-Host': 'cpp-code-compiler.p.rapidapi.com'
+      'X-RapidAPI-Host': 'cpp-17-code-compiler.p.rapidapi.com'
     },
     data: {
       code: code,
@@ -126,7 +126,7 @@ delete userSocketMap[socket.id];
         });
 });
 
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT_B || 80;
 
 server.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
