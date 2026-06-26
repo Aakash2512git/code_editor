@@ -1,70 +1,113 @@
-# Getting Started with Create React App
+# CodeCollab
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Real-time collaborative code editor with AI-powered code review. Built for portfolio/demo use — deploy the frontend + serverless APIs on Vercel, run the WebSocket collab server on Railway or Render.
 
-## Available Scripts
+![Stack](https://img.shields.io/badge/React-18-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![Vite](https://img.shields.io/badge/Vite-6-purple) ![Groq](https://img.shields.io/badge/AI-Groq-orange)
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Real-time collaboration** — Multiple users edit the same C++ file via WebSockets (Socket.io)
+- **AI code review** — Groq-powered side panel scores code and surfaces bugs, style issues, and fixes
+- **AI chat** — Ask follow-up questions about your code in context
+- **Remote compilation** — Run C++ code via RapidAPI compiler
+- **Modern stack** — Vite, React, TypeScript, Monaco Editor, Tailwind CSS
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Architecture
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
+┌─────────────────────┐     ┌──────────────────────────┐
+│  Vercel (Frontend)  │────▶│  Vercel Serverless APIs  │
+│  React + Monaco     │     │  /api/review  (Groq)     │
+│  AI Side Panel      │     │  /api/chat    (Groq)     │
+└──────────┬──────────┘     │  /api/compile (RapidAPI) │
+           │ WebSocket      └──────────────────────────┘
+           ▼
+┌─────────────────────┐
+│  Railway / Render   │
+│  collab-server/     │  ← Socket.io rooms
+└─────────────────────┘
+```
 
-### `npm test`
+## Quick Start (Local)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 1. Install dependencies
 
-### `npm run build`
+```bash
+npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 2. Configure environment
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+cp .env.example .env
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Fill in:
+- `GROQ_API_KEY` — from [console.groq.com](https://console.groq.com)
+- `VITE_SOCKET_URL` — `http://localhost:3001` for local dev
 
-### `npm run eject`
+Code compilation uses the free [Judge0 CE](https://ce.judge0.com) API (no key required). Optionally set `RAPIDAPI_KEY` if you subscribe to Judge0 on RapidAPI.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 3. Run all services (3 terminals)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+# Terminal 1 — WebSocket collab server
+npm run collab
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Terminal 2 — Local API server (proxied by Vite)
+npm run dev:api
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# Terminal 3 — Frontend
+npm run dev
+```
 
-## Learn More
+Open [http://localhost:5173](http://localhost:5173)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Deploy to Vercel
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Frontend + APIs
 
-### Code Splitting
+1. Push to GitHub
+2. Import project in [Vercel](https://vercel.com)
+3. Add environment variables:
+   - `GROQ_API_KEY`
+   - `VITE_SOCKET_URL` (your collab server URL)
+4. Deploy — Vercel auto-detects Vite and deploys `/api` serverless functions
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Collab server (Railway / Render)
 
-### Analyzing the Bundle Size
+Deploy the `collab-server/` folder as a Node service:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **Start command:** `node index.js`
+- **Port:** `3001` (or set `PORT` env var)
+- Set `VITE_SOCKET_URL` in Vercel to your Railway URL (e.g. `https://your-app.railway.app`)
 
-### Making a Progressive Web App
+## Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```
+├── api/                  # Vercel serverless functions
+│   ├── review.js         # AI code review (Groq)
+│   ├── chat.js           # AI follow-up chat
+│   └── compile.js        # C++ compilation
+├── collab-server/        # Socket.io server (Railway/Render)
+├── src/
+│   ├── components/
+│   │   ├── AISidePanel.tsx
+│   │   ├── CodeEditor.tsx
+│   │   └── Client.tsx
+│   └── pages/
+│       ├── Home.tsx
+│       └── EditorPage.tsx
+└── scripts/dev-api.mjs   # Local API server for development
+```
 
-### Advanced Configuration
+## CV Highlights
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Split architecture: static frontend on Vercel, serverless AI APIs, dedicated WebSocket service
+- Integrated Groq LLM for structured code review with severity-tagged feedback
+- Real-time collaborative editing with Socket.io room sync
+- Secured API keys server-side with rate-limit-ready serverless endpoints
 
-### Deployment
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT
